@@ -12,7 +12,8 @@ const InputField = ({ placeHolder, onChange, value, label, type }) => {
         autoComplete="new-password"
         value={value || ""}
         onChange={e => onChange(e.target.value)}
-      ></input>
+        autoComplete="off"
+      />
       <label htmlFor={placeHolder} className="input-field__label">
         {label}
       </label>

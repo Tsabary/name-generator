@@ -1,14 +1,14 @@
 import firebase from 'firebase';
 
 const config = {
-  apiKey: "AIzaSyBvcAhyLAqc05namFVG-gxYzjoX25nGGkg",
-  authDomain: "project-template-5c65a.firebaseapp.com",
-  databaseURL: "https://project-template-5c65a.firebaseio.com",
-  projectId: "project-template-5c65a",
-  storageBucket: "project-template-5c65a.appspot.com",
-  messagingSenderId: "550178105554",
-  appId: "1:550178105554:web:ba60faa7873d5076d7250b",
-  measurementId: "G-RF7N6HNHH5"
+  apiKey: "AIzaSyByxKIsyY6iPUMHTXUfZgJxmOrQSgO2Btg",
+  authDomain: "fabntt.firebaseapp.com",
+  databaseURL: "https://fabntt.firebaseio.com",
+  projectId: "fabntt",
+  storageBucket: "fabntt.appspot.com",
+  messagingSenderId: "957228313775",
+  appId: "1:957228313775:web:e1a08375cb2df3cac6785a",
+  measurementId: "G-LE51CP3M28"
   };
 
 firebase.initializeApp(config);

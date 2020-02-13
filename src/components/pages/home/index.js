@@ -1,15 +1,18 @@
+import "./styles.scss";
 import React from "react";
-import BoxedButton from "../../formComponents/boxedButton";
-import { Link } from "react-router-dom";
 
 const Home = () => {
   return (
     <div className="home">
-      <Link to={"/new-item"}>
-        {/* <a href="#new-item"> */}
-          <BoxedButton text="Click me" />
-        {/* </a> */}
-      </Link>
+      <div className="home__title">
+        <h1>Branding is Hard</h1>
+        <h2>Create a new brand with Billie, our AI powered word generator.</h2>
+        <div className="boxed-button small-margin-top">
+          <a href="#sign-up">
+            Start Now
+          </a>
+        </div>
+      </div>
     </div>
   );
 };

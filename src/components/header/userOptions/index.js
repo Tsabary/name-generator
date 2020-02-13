@@ -2,6 +2,7 @@ import "./styles.scss";
 import React, { useState, useContext, useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import Popup from "reactjs-popup";
 
 import { AuthContext } from "../../../providers/Auth";
 
@@ -46,9 +47,13 @@ const UserOptions = ({ logOut, resendVerification }) => {
         ) : null}
 
         {currentUser.emailVerified ? (
+
+
           <a className="user-options__option" href="#update-profile">
             <TextButton text="Edit profile" />
           </a>
+
+
         ) : (
           <TextButton
             text="Resend email verification"

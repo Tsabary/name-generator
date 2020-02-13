@@ -11,25 +11,27 @@
 
 a {
   text-decoration: none;
+  color: inherit;
+  &:hover{
+    color: inherit;
+  }
 }
 
 h1 {
   font-family: var(--font-main-bold);
   font-weight: 900;
-  font-size: 5rem;
-  line-height: 8rem;
-  text-align: center;
+  font-size: 15rem;
+  line-height: 15rem;
   color: var(--color-grey-dark);
   margin-top: 4rem;
   margin-bottom: 2rem;
 }
 h2 {
-  font-family: var(--font-main-bold);
+  font-family: var(--font-main);
   font-weight: 900;
-  font-size: 4rem;
+  font-size: 3.5rem;
   line-height: 6rem;
-  text-align: center;
-  color: var(--color-grey-dark);
+  color: var(--color-main);
   margin-top: 3.5rem;
   margin-bottom: 1.5rem;
 }
@@ -58,7 +60,7 @@ h3 {
 .paragraph {
   font-family: var(--font-main);
   font-size: 1.6rem;
-  color: var(--color-grey-medium);
+  color: var(--color-grey-medium-dark);
   line-height: 2.8rem;
   margin-bottom: 2.8rem;
 }
@@ -71,6 +73,15 @@ h3 {
   justify-content: center;
 }
 
+.vertical-align {
+  height: 100%;
+  // margin-top: 8rem;
+  // margin-bottom: auto;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  // background-color: yellow;
+}
 .bold {
   &-700 {
     font-weight: 700;
@@ -125,20 +136,34 @@ h3 {
   bottom: 0;
   right: 0;
   &__container {
-    width: 40%;
-    padding-top: 40%;
     position: relative;
     border-radius: 100%;
     overflow: hidden;
-    margin: auto;
-    border: white solid 0.5rem;
-    box-shadow: 0 0.2rem 1rem rgb(170, 170, 170);
-    transition: all .2s cubic-bezier(1, 0, 0, 1);
+    transition: all 0.1s cubic-bezier(1, 0, 0, 1);
 
-    &--growing{
-      &:hover{
-        width: 45%;
-        padding-top: 45%;
+    &--profile-form {
+      margin: auto;
+      width: 40%;
+      padding-top: 40%;
+      border: white solid 0.5rem;
+      box-shadow: 0 0.2rem 1rem rgb(170, 170, 170);
+
+      &:hover {
+        width: 42%;
+        padding-top: 42%;
+      }
+    }
+
+    &--small {
+      border: white solid 0.2rem;
+      width: 4.5rem;
+      height: 4.5rem;
+      margin: 1rem;
+      box-shadow: 0 0.2rem .8rem rgba(170, 170, 170, .8);
+
+      &:hover {
+        width: 4.8rem;
+        height: 4.8rem;
       }
     }
   }
@@ -177,19 +202,37 @@ h3 {
   }
 }
 
+.bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -10;
+  opacity: 0.15;
+
+  &__content {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 .popup {
-  display: grid;
+  display: none;
   width: calc(100% - 12rem);
   justify-content: center;
   align-items: center;
-  visibility: hidden;
-  opacity: 0;
+  // visibility: hidden;
+  // opacity: 0;
   transition: all 0.2s;
   position: absolute;
-  background-color: rgba(255, 255, 255, 0.75);
+  // background-color: rgba(255, 255, 255, 0.75);
+  // height: 1rem;
   &:target {
-    visibility: visible;
-    opacity: 1;
+    // visibility: visible;
+    // opacity: 1;
+    display: grid;
   }
 
   &__close {
@@ -210,7 +253,6 @@ h3 {
     max-width: 90%;
     display: flex;
     flex-direction: column;
-
     z-index: 10;
     margin: 2rem 2rem 4rem 2rem;
     padding: 5rem 8rem;
@@ -235,7 +277,7 @@ h3 {
   }
 }
 
-.empty-feed{
+.empty-feed {
   font-family: var(--font-main-bold);
   color: var(--color-grey-light);
   font-size: 5rem;
@@ -320,6 +362,10 @@ h3 {
   margin-bottom: 16rem;
 }
 
+.extra-tiny-margin-top {
+  margin-top: 1rem;
+}
+
 .tiny-margin-top {
   margin-top: 2rem;
 }
@@ -342,6 +388,10 @@ h3 {
 .flex-group-spaced {
   display: flex;
   justify-content: space-between;
+}
+.flex-group-spaced-around {
+  display: flex;
+  justify-content: space-around;
 }
 
 .big-numbered-list {

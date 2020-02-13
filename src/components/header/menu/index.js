@@ -24,6 +24,7 @@ const Menu = ({ setCurrentPage, page }) => {
   const renderMenuItems = array => {
     return array.map(item => {
       const smallHyphenedItem = turnToLowerCaseWithHyphen(item);
+
       return (
         <div className="flex-group" key={smallHyphenedItem}>
           <input
@@ -72,10 +73,10 @@ const Menu = ({ setCurrentPage, page }) => {
 
   return (
     <div className="menu">
-      {renderMenuItems(["Feed", "Search", "Contact us"])}
-      {renderDropDownMenuItems([
+      {renderMenuItems(["Generator"])}
+      {/* {renderDropDownMenuItems([
         { title: "Top category", pages: ["Page 1", "Page 2"] }
-      ])}
+      ])} */}
     </div>
   );
 };

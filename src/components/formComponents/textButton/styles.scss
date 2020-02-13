@@ -4,6 +4,10 @@
   color: var(--color-grey-dark);
   text-decoration: none;
   cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+  user-select: none;
   &:hover {
     color: var(--color-main);
   }

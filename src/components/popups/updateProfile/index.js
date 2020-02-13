@@ -50,6 +50,11 @@ const UpdateProfile = ({ updateProfile }) => {
     }
   }, [currentUserProfile]);
 
+  const handleSubmit = event => {
+    event.preventDefault();
+    updateProfile(values, currentUser, imageObj);
+  };
+
   return (
     <div className="popup" id="update-profile">
       <a className="popup__close" href="#">
@@ -57,11 +62,9 @@ const UpdateProfile = ({ updateProfile }) => {
       </a>
       <div className="popup__container">
         <div className="popup__title">Update your profile</div>
-        <form
-          onSubmit={() => updateProfile(values, currentUser, imageObj)}
-        >
+        <form onSubmit={handleSubmit}>
           <label htmlFor="update-profile-image" className="new-event__label">
-            <div className="round-image__container">
+            <div className="round-image__container round-image__container--profile-form small-margin-top small-margin-bottom">
               <img
                 className="round-image clickable"
                 src={
@@ -86,14 +89,14 @@ const UpdateProfile = ({ updateProfile }) => {
             onChange={name => setValues({ ...values, name })}
             label="Full name"
           />
-
+{/* 
           <TextArea
             type="text"
             placeHolder="Longer input"
             value={values.longer_input}
             onChange={longer_input => setValues({ ...values, longer_input })}
             label="Longer input"
-          />
+          /> */}
 
           <PlacesAutocomplete
             value={values.address || ""}

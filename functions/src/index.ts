@@ -7,32 +7,36 @@ const defaultStorage = admin.storage();
 // const FieldValue = admin.firestore.FieldValue;
 
 exports.userCreated = functions.auth.user().onCreate(user => {
+  const promises: any = [];
+
   if (
     user.providerData &&
     ["facebook.com", "google.com"].includes(user.providerData[0].providerId)
   ) {
-    const promises: any = [];
-
-    if (user.providerData[0].providerId === "facebook.com") {
-      promises.push(
-        admin.auth().updateUser(user.uid, {
-          emailVerified: true
-        })
-      );
-    }
-
     promises.push(
       db.doc("users/" + user.uid).set({
+        email: user.email,
         uid: user.uid,
         name: user.providerData[0].displayName,
         avatar: user.providerData[0].photoURL
       })
     );
 
-    return Promise.all(promises);
+    if (user.providerData[0].providerId === "facebook.com")
+      promises.push(
+        admin.auth().updateUser(user.uid, {
+          emailVerified: true
+        })
+      );
   } else {
-    return null;
+    promises.push(
+      db.doc("users/" + user.uid).set({
+        email: user.email,
+        uid: user.uid
+      })
+    );
   }
+  return Promise.all(promises);
 });
 
 exports.writeFileToDatabase = functions.storage.object().onFinalize(object => {
@@ -50,7 +54,7 @@ exports.writeFileToDatabase = functions.storage.object().onFinalize(object => {
       const silcedPath = path.split("/", 3);
 
       switch (silcedPath[1]) {
-        case "user-avatars":
+        case "user_avatars":
           return db
             .collection("users")
             .doc(silcedPath[2])

@@ -10,11 +10,17 @@
   border-radius: 5rem;
   box-shadow: 0 0.2rem 1rem rgb(170, 170, 170);
   border: none;
+  border-bottom: 2px solid var(--color-main-darkest);
   outline: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.1s;
   &:hover {
-    transform: translateY(-0.2rem);
+    transform: translateY(-0.15rem);
     box-shadow: 0 0.4rem 1.4rem rgb(170, 170, 170);
+    color: white;
+  }
+  &:active{
+    transform: translateY(-0.08rem);
+    box-shadow: 0 0.2rem 1.2rem rgb(170, 170, 170);
   }
 }
