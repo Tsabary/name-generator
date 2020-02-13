@@ -1,7 +1,13 @@
 .single-word {
+  width: 99%;
+  margin: auto;
   padding: 3rem;
   border-radius: 3rem;
   box-shadow: 0 1rem 3rem rgb(180, 180, 180);
+  transition: all .2s;
+  &:hover{
+    width: 100%;
+  }
   &__top {
     display: grid;
     grid-template-columns: 1fr max-content max-content 2rem max-content;

@@ -1,11 +1,12 @@
 import "./styles.scss";
 import React, { useState, useEffect, useContext } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 
 import { AuthContext } from "../../../../providers/Auth";
 
-import CurrentWord from "./currentWord";
+import Header from "./header";
+import ActionButtons from "./actionButtons";
+import Shuffler from "./shuffler";
 
 import {
   setCurrentPage,
@@ -14,7 +15,6 @@ import {
   fetchWords,
   fetchComments,
   fetchReplies,
-  // shuffleLetters,
   addLetterStart,
   addLetterEnd,
   addWord,
@@ -24,19 +24,12 @@ import {
   removeWordFromBank,
   assignWord,
   addMember,
-  // addUserToTeam
   cleanWords
 } from "../../../../actions";
 
-import {
-  handleKeep,
-  handleShuffle,
-  renderList,
-  renderAvatars,
-  handleInvite
-} from "./functions";
+import { handleKeep, handleShuffle, renderList } from "./functions";
 
-const Shuffler = ({
+const Project = ({
   projects,
   currentProject,
   currentWord,
@@ -46,7 +39,6 @@ const Shuffler = ({
   setCurrentPage,
   fetchSingleProject,
   setProject,
-  // shuffleLetters,
   addWord,
   addWordForML,
   fetchWords,
@@ -59,7 +51,6 @@ const Shuffler = ({
   removeWordFromBank,
   assignWord,
   addMember,
-  addUserToTeam,
   match,
   cleanWords
 }) => {
@@ -68,11 +59,10 @@ const Shuffler = ({
   const [startTime, setStartTime] = useState(Date.now());
   const [wasSaved, setWasSaved] = useState(false);
   const [currentWordLength, setCurrentWordLength] = useState(false);
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [formSubmited, setFormSubmited] = useState(false);
+  const [previousWord, setPreviousWord] = useState([]);
 
   useEffect(() => {
-    setCurrentPage("generator"); // set the current page, for the menu and for the bg video
+    setCurrentPage("studio"); // set the current page, for the menu and for the bg video
 
     if (!!currentUserProfile)
       if (!!projects.length) {
@@ -89,36 +79,109 @@ const Shuffler = ({
         // if the user is logged in but his projects are empty, then this probably means that they've came directly to this address. In that case, feth this current project and all it's data. After that happened succefully, tis if statement would be executed again only this time the first condition would be met.
         fetchSingleProject(match.params.id, setProject);
       }
-    console.log(currentWord.length, currentWord);
+    // console.log(currentWord.length, currentWord);
     window.scrollTo(0, 0);
   }, [currentUserProfile, projects, wordSet]);
 
   useEffect(() => {
     if (!currentWord.length) {
       generateSet([{}, {}, {}, {}]);
-      console.log("generating set");
+      // console.log("generating set");
     }
   }, []);
 
   useEffect(() => {
-    console.log("classifyWords", wordSet.length);
+    // console.log("classifyWords", wordSet.length);
     classifyWords(wordSet); //whenever the word set has ListeningStateChangedEvent, we want to calssify our words
   }, [wordSet]);
 
   useEffect(() => {
-    console.log("assignWord", wordBank);
-
-    if (!!wordBank) assignWord(wordBank); //need a better check
+    // console.log(currentWord);
+    // console.log(previousWord);
+    if (
+      !!wordBank
+      //   //  &&
+      //   // currentWord
+      //   //   .map(letter => {
+      //   //     return letter.letter;
+      //   //   })
+      //   //   .join("") !==
+      //   //   previousWord
+      //   //     .map(letter => {
+      //   //       return letter.letter;
+      //   //     })
+      //   //     .join("")
+    ) {
+      assignWord(wordBank); //need a better check
+      // setPreviousWord(currentWord);
+    }
   }, [wordBank]);
 
   useEffect(() => {
+    // if the new word ('currentWord' is the new word at this point) doesn't have as many charachters as the previous word, we need to generate a new set of words that had the same amount of charachters as the new word
     if (currentWord.length !== currentWordLength) {
       generateSet(currentWord);
       setCurrentWordLength(currentWord.length);
     }
+
+    console.log(currentWord);
+    console.log(previousWord);
+
+    console.log(
+      currentWord
+        .map(letter => {
+          return letter.letter;
+        })
+        .join("") ===
+        previousWord
+          .map(letter => {
+            return letter.letter;
+          })
+          .join("")
+    );
+    console.log(currentWord !== previousWord);
+    console.log(!!previousWord.length);
+
+    // console.log(
+    //   currentWord.map(letter => {
+    //     return letter.locked;
+    //   })
+    // );
+
+    // If the previous word and the new word generate the same string, but we still got a new word, then most likely it is becuse the locked state of one of the letters has changed. Not certain, and probably not the best way to go but might be a good solution for now.
+    // The last chack is to see if any of the letters is unlocked, or if they are al locked. Before, I f we reached a point where they were all locked, then we ran into a loop. WIth this we don't.
+    // prreferably a more elegant approach could be taken, but for now, it works.
+    
+    if (
+      currentWord
+        .map(letter => {
+          return letter.letter;
+        })
+        .join("") ===
+        previousWord
+          .map(letter => {
+            return letter.letter;
+          })
+          .join("") &&
+      currentWord !== previousWord &&
+      !!previousWord.length &&
+      currentWord
+        .map(letter => {
+          return letter.locked;
+        })
+        .includes(false)
+    ) {
+      console.log("this happens");
+      generateSet(currentWord);
+    }
+    setPreviousWord(currentWord);
   }, [currentWord]);
 
   const shuffleClick = () => {
+    wordBank.good.length > 1
+      ? console.log("bigger than 1")
+      : console.log("small or event to 1");
+
     wordBank.good.length > 1
       ? handleShuffle(
           currentWord,
@@ -129,7 +192,6 @@ const Shuffler = ({
           addWordForML,
           currentProject,
           currentUserProfile.uid,
-          // shuffleLetters,
           wordBank,
           removeWordFromBank
         )
@@ -152,89 +214,10 @@ const Shuffler = ({
 
   return (
     <div className="shuffler">
-      <div className="shuffler__header">
-        <input
-          className="shuffler__header-invite-checkbox"
-          type="checkbox"
-          id="invite_members"
-        />
-        <span className="shuffler__header--visible">
-          <Link className="shuffler__navigate-back" to="/generator">
-            <span className="tiny-margin-right">&#x2190;</span>
-            {currentProject.title}
-          </Link>
-          <div className="shuffler__header-seperator" />
+      <Header currentProject={currentProject} addMember={addMember} />
+      <Shuffler addLetterStart={addLetterStart} addLetterEnd={addLetterEnd} />
+      <ActionButtons shuffleClick={shuffleClick} keepClick={keepClick} />
 
-          {!!currentProject && !!currentProject.team ? (
-            <div className="shuffler__header-members">
-              {currentProject.team.length}{" "}
-              {currentProject.team.length === 1 ? "member:" : "members:"}
-              <div className="shuffler__header-member-avatars">
-                {renderAvatars(currentProject.team)}
-              </div>
-            </div>
-          ) : null}
-
-          <div className="shuffler__header-seperator" />
-          <div>
-            <label className="text-button" htmlFor="invite_members">
-              + Add members
-            </label>
-          </div>
-        </span>
-        <span className="shuffler__header--hidden">
-          <label className="text-button" htmlFor="invite_members">
-            &#x2190; Dashboard
-          </label>
-          {formSubmited ? (
-            <div className="text-button" onClick={() => setFormSubmited(false)}>
-              Add another member
-            </div>
-          ) : (
-            <form
-              onSubmit={e =>
-                handleInvite(
-                  e,
-                  addMember,
-                  inviteEmail,
-                  setInviteEmail,
-                  setFormSubmited,
-                  currentProject.id
-                )
-              }
-              className="shuffler__header-invite-form"
-            >
-              <input
-                className="input-field__input"
-                type="email"
-                placeholder="Email address"
-                autoComplete="new-password"
-                value={inviteEmail}
-                onChange={e => setInviteEmail(e.target.value)}
-                required
-              />
-              <button type="submit" className="text-button">
-                Add member
-              </button>
-            </form>
-          )}
-        </span>
-      </div>
-
-      <div className="shuffler__word big-margin-top">
-        <div className="shuffler__adder" onClick={addLetterStart} />
-        <CurrentWord />
-        <div className="shuffler__adder" onClick={addLetterEnd} />
-      </div>
-      <div className="flex-group-spaced-around small-margin-top">
-        <div className="shuffler__button clickable" onClick={shuffleClick}>
-          <p>Shuffle</p>
-        </div>
-
-        <div className="shuffler__button clickable" onClick={keepClick}>
-          <p>Keep</p>
-        </div>
-      </div>
       <div className="shuffler__words medium-margin-top medium-margin-bottom">
         {renderList(savedWords)}
       </div>
@@ -260,7 +243,6 @@ export default connect(mapStateToProps, {
   fetchWords,
   fetchComments,
   fetchReplies,
-  // shuffleLetters,
   addLetterStart,
   addLetterEnd,
   addWord,
@@ -271,4 +253,4 @@ export default connect(mapStateToProps, {
   assignWord,
   addMember,
   cleanWords
-})(Shuffler);
+})(Project);

@@ -6,7 +6,14 @@ import { connect } from "react-redux";
 const CurrentWord = ({ currentWord }) => {
   const renderLetters = currentWord => {
     return currentWord.map(letter => {
-      return <SingleLetter letter={letter} key={letter.position} />;
+      //I'm passing the letter the locked position just so when things change, React is forced to re-render. Before, it would just leave things the same and a newly locked letter would sometimes still show the unlocked icon.
+      return (
+        <SingleLetter
+          letter={letter}
+          key={letter.position}
+          locked={letter.locked}
+        />
+      );
     });
   };
 

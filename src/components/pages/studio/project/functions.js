@@ -1,4 +1,6 @@
 import React from "react";
+import ReactTooltip from "react-tooltip";
+
 import SingleWord from "./singleWord";
 const initializationWord = "plum";
 
@@ -11,7 +13,6 @@ export const handleShuffle = (
   addWordForML,
   currentProject,
   userUID,
-  // shuffleLetters,
   wordBank,
   removeWordFromBank
 ) => {
@@ -39,9 +40,6 @@ export const handleShuffle = (
   setStartTime(Date.now());
 
   removeWordFromBank(currentWord);
-
-  // //Actually shuffle the letters
-  // shuffleLetters(wordBank);
 };
 
 export const handleKeep = (
@@ -114,6 +112,8 @@ export const renderAvatars = memebrs => {
       <div
         className="round-image__container round-image__container--small round-image__container--growing clickable"
         key={memeber.uid}
+        data-tip
+        data-for={memeber.uid}
       >
         <img
           className="round-image"
@@ -122,6 +122,7 @@ export const renderAvatars = memebrs => {
             "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
           }
         />
+        <ReactTooltip id={memeber.uid} type="dark" effect="solid">{memeber.name}</ReactTooltip>
       </div>
     );
   });

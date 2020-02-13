@@ -8,7 +8,6 @@ import {
   REMOVE_LETTER,
   ADD_START,
   ADD_END,
-  SHUFFLE,
   GENERATE_SET,
   ADD_WORD,
   SET_PROJECT,
@@ -115,12 +114,6 @@ export const fetchSingleProject = (id, setProject) => async dispatch => {
     type: FETCH_SINGLE_PROJECT,
     payload: !!data.data() ? data.data() : {}
   });
-
-  // if (!!data)
-  //   dispatch({
-  //     type: FETCH_SINGLE_PROJECT,
-  //     payload: data.data()
-  //   });
 };
 
 export const fetchWords = projectID => async dispatch => {
@@ -212,8 +205,6 @@ export const setCurrentPage = value => {
 };
 
 export const setProject = project => {
-  // fetchWords(project.id);
-
   return {
     type: SET_PROJECT,
     payload: project
@@ -223,6 +214,7 @@ export const setProject = project => {
 //////// Word related actions////////
 
 export const generateSet = currentWord => {
+  console.log("generating set");
   return {
     type: GENERATE_SET,
     payload: currentWord
@@ -230,6 +222,8 @@ export const generateSet = currentWord => {
 };
 
 export const classifyWords = set => {
+  console.log("classifyWords");
+
   return {
     type: CLASSIFY_WORDS,
     payload: set
@@ -251,6 +245,8 @@ export const lockLetter = letter => {
 };
 
 export const removeLetter = letterPosition => {
+  console.log("remove called from action");
+
   return {
     type: REMOVE_LETTER,
     payload: letterPosition
@@ -263,13 +259,6 @@ export const assignWord = bank => {
     payload: bank
   };
 };
-
-// export const shuffleLetters = bank => {
-//   return {
-//     type: SHUFFLE,
-//     payload: bank
-//   };
-// };
 
 export const addLetterStart = () => {
   return {
@@ -429,126 +418,3 @@ export const addReply = (
     });
   });
 };
-
-// export const fetchAllItems = () => async dispatch => {
-//   const data = await db.collection("items").get();
-
-//   if (data.docs !== undefined) {
-//     const docsData = [];
-//     data.docs.map(doc => {
-//       docsData.push(doc.data());
-//     });
-
-//     dispatch({
-//       type: FETCH_GROUP,
-//       payload: docsData
-//     });
-//   } else {
-//     dispatch({
-//       type: FETCH_GROUP,
-//       payload: []
-//     });
-//   }
-// };
-
-// export const fetchSingleItem = (id, setEvent) => async dispatch => {
-//   const data = await db
-//     .collection("items")
-//     .doc(id)
-//     .get();
-
-//   setEvent(data.data());
-
-//   if (!!data) {
-//     dispatch({
-//       type: FETCH_SINGLE,
-//       payload: data.data()
-//     });
-//   }
-// };
-
-// export const fetchAllUsers = () => async dispatch => {
-//   const data = await db.collection("users").get();
-
-//   if (data.docs !== undefined) {
-//     const docsData = [];
-//     data.docs.map(doc => {
-//       docsData.push(doc.data());
-//     });
-
-//     dispatch({
-//       type: FETCH_USERS,
-//       payload: docsData
-//     });
-//   } else {
-//     dispatch({
-//       type: FETCH_USERS,
-//       payload: []
-//     });
-//   }
-// };
-
-// export const fetchSingleUser = (id, setEvent) => async dispatch => {
-//   const data = await db
-//     .collection("users")
-//     .doc(id)
-//     .get();
-
-//   // setEvent(data.data());
-
-//   if (!!data) {
-//     dispatch({
-//       type: FETCH_SINGLE_USER,
-//       payload: data.data()
-//     });
-//   }
-// };
-
-// export const newItem = (values, image, setValues) => () => {
-//   const newDoc = db.collection("items").doc();
-
-//   newDoc
-//     .set({ ...values, id: newDoc.id })
-//     .then(() => {
-//       storageRef
-//         .child(`images/items/${newDoc.id}`)
-//         .put(image)
-//         .then(result => {
-//           console.log(result);
-//         })
-//         .catch(err => {
-//           console.log(err);
-//         });
-//     })
-//     // .then(() => {
-//     //   setValues({});
-//     // })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// };
-
-// export const updateItem = (values, image, setValues) => () => {
-//   console.log(image);
-//   db.collection("items")
-//     .doc(values.id)
-//     .set(values)
-//     .then(() => {
-//       if (!!image)
-//         storageRef
-//           .child(`images/items/${values.id}`)
-//           .put(image)
-//           .then(result => {
-//             console.log(result);
-//           })
-//           .catch(err => {
-//             console.log(err);
-//           });
-//     })
-//     // .then(() => {
-//     //   setValues({});
-//     // })
-//     .catch(err => {
-//       console.log(err);
-//     });
-// };

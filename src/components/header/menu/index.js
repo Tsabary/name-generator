@@ -73,7 +73,7 @@ const Menu = ({ setCurrentPage, page }) => {
 
   return (
     <div className="menu">
-      {renderMenuItems(["Generator"])}
+      {renderMenuItems(["Studio"])}
       {/* {renderDropDownMenuItems([
         { title: "Top category", pages: ["Page 1", "Page 2"] }
       ])} */}

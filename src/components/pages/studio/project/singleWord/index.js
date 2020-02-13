@@ -2,9 +2,8 @@ import "./styles.scss";
 import React, { useContext, useState } from "react";
 import { connect } from "react-redux";
 import SingleComment from "../singleComment";
-// import firebase from "../../../../../firebase";
 import { AuthContext } from "../../../../../providers/Auth";
-import { addComment, removeWord, voteOnWord } from "../.././../../../actions";
+import { addComment, removeWord, voteOnWord } from "../../../../../actions";
 import InputField from "../../../../formComponents/inputField";
 
 const SingleWord = ({

@@ -17,8 +17,8 @@ import UpdateProfile from "./popups/updateProfile";
 import NewProject from "./popups/newProject";
 
 import Home from "./pages/home";
-import ProjectBrowser from "./pages/generator/projectBrowser";
-import Shuffler from "./pages/generator/shuffler";
+import ProjectBrowser from "./pages/studio/projectBrowser";
+import Shuffler from "./pages/studio/project";
 
 
 const App = ({ page }) => {
@@ -45,8 +45,8 @@ const App = ({ page }) => {
             <Header />
             <Switch>
               <Route path="/" exact component={Home} />
-              <Route path="/generator" exact component={ProjectBrowser} />
-              <Route path="/generator/:id" exact component={Shuffler} />
+              <Route path="/studio" exact component={ProjectBrowser} />
+              <Route path="/studio/:id" exact component={Shuffler} />
               {/* <Route path="/feed" exact component={Feed} />
               <Route path="/search" exact component={Search} />
               <Route path="/contact" exact component={Contact} />

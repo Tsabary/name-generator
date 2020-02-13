@@ -10,7 +10,7 @@ const ProjectBrowser = ({ projects, fetchProjects, setCurrentPage }) => {
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
-    setCurrentPage('generator')
+    setCurrentPage('studio')
     if (!!currentUser) fetchProjects(currentUser);
   }, [currentUser]);
 
@@ -19,7 +19,7 @@ const ProjectBrowser = ({ projects, fetchProjects, setCurrentPage }) => {
       ? projects.map(project => {
           return (
             <Link
-              to={`/generator/${project.id}`}
+              to={`/studio/${project.id}`}
               className="project-option"
               key={project.id}
             >

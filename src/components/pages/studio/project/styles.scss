@@ -1,0 +1,42 @@
+.shuffler {
+  &__word {
+    display: flex;
+    width: max-content;
+    align-items: center;
+    margin: 7rem auto auto auto;
+  }
+  &__adder {
+    &::before {
+      content: "+";
+      display: block;
+      font-size: 10rem;
+      font-family: var(--font-main-bold);
+      cursor: pointer;
+    }
+    &:hover {
+      color: var(--color-main);
+    }
+  }
+
+  &__button {
+    font-family: var(--font-main-bold);
+    font-size: 5rem;
+    user-select: none;
+    &:hover {
+      color: var(--color-main);
+    }
+  }
+  &__words {
+    display: grid;
+    gap: 6rem;
+  }
+
+
+
+  &__navigate-back {
+    color: var(--color-grey-dark);
+    &:hover {
+      color: var(--color-main);
+    }
+  }
+}

@@ -1,14 +1,11 @@
 import {
   ADD_END,
   ADD_START,
-  SHUFFLE,
   ASSIGN_WORD,
   LOCK_LETTER,
   CHANGE_LETTER,
   REMOVE_LETTER
 } from "../../actions/types";
-
-import { allLetters } from "../../constants";
 
 export default (
   state = [
@@ -19,55 +16,45 @@ export default (
   ],
   action
 ) => {
-  // const generateWord = () => {
-  //   var newWord = [];
-  //   for (var i = 0; i < state.length; i++) {
-  //     newWord.push(
-  //       state[i].locked
-  //         ? state[i]
-  //         : {
-  //             position: i,
-  //             letter: allLetters()[
-  //               Math.floor(Math.random() * Math.floor(allLetters().length))
-  //             ],
-  //             locked: false
-  //           }
-  //     );
-  //   }
-  //   return newWord;
-  // };
-
   switch (action.type) {
+    // case ADD_START:
+    //   var newWord = [{ position: 0, letter: "x", locked: false }, ...state];
+    //   for (var i = 0; i < newWord.length; i++) {
+    //     newWord[i].position = i;
+    //   }
+    //   return newWord;
+
     case ADD_START:
-      var newWord = [{ position: 0, letter: "x", locked: false }, ...state];
-      for (var i = 0; i < newWord.length; i++) {
-        newWord[i].position = i;
+      let newWordStart = [
+        { position: 0, letter: "x", locked: false },
+        ...state
+      ];
+      for (var i = 0; i < newWordStart.length; i++) {
+        newWordStart[i].position = i;
+        newWordStart[i].locked = !!state[i-1] ? state[i-1].locked : false;
       }
-      return newWord;
+      return newWordStart;
 
     case ADD_END:
-      var newWord = [...state, { position: 0, letter: "x", locked: false }];
-      for (var i = 0; i < newWord.length; i++) {
-        newWord[i].position = i;
+      let newWordEnd = [...state, { position: 0, letter: "x", locked: false }];
+      for (var i = 0; i < newWordEnd.length; i++) {
+        newWordEnd[i].position = i;
+        newWordEnd[i].locked = !!state[i] ? state[i].locked : false;
       }
-      return newWord;
+      return newWordEnd;
 
-      case ASSIGN_WORD:
-        return action.payload.good[0];
-
-    // case SHUFFLE:
-    //   return generateWord();
+    case ASSIGN_WORD:
+      return action.payload.good[0];
 
     case LOCK_LETTER:
       return state.map(letter => {
-        if (letter.position === action.payload.position) {
-          return action.payload;
-        } else {
-          return letter;
-        }
+        return letter.position === action.payload.position
+          ? action.payload
+          : letter;
       });
 
     case REMOVE_LETTER:
+      console.log("remove called from reducer");
       var newWord = state.filter(letter => letter.position !== action.payload);
       for (var i = 0; i < newWord.length; i++) {
         newWord[i].position = i;
