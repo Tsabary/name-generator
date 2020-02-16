@@ -12,7 +12,7 @@
 a {
   text-decoration: none;
   color: inherit;
-  &:hover{
+  &:hover {
     color: inherit;
   }
 }
@@ -29,7 +29,7 @@ h1 {
 h2 {
   font-family: var(--font-main);
   font-weight: 900;
-  font-size: 3.5rem;
+  font-size: 3rem;
   line-height: 6rem;
   color: var(--color-main);
   margin-top: 3.5rem;
@@ -75,12 +75,9 @@ h3 {
 
 .vertical-align {
   height: 100%;
-  // margin-top: 8rem;
-  // margin-bottom: auto;
   display: flex;
   justify-content: center;
   align-content: center;
-  // background-color: yellow;
 }
 .bold {
   &-700 {
@@ -107,6 +104,10 @@ h3 {
   &__content {
     font-style: italic;
   }
+}
+
+.form-error {
+  color: red;
 }
 
 .cover-image {
@@ -159,7 +160,7 @@ h3 {
       width: 4.5rem;
       height: 4.5rem;
       margin: 1rem;
-      box-shadow: 0 0.2rem .8rem rgba(170, 170, 170, .8);
+      box-shadow: 0 0.2rem 0.8rem rgba(170, 170, 170, 0.8);
 
       &:hover {
         width: 4.8rem;
@@ -288,6 +289,8 @@ h3 {
   &__button {
     height: 6rem;
     width: 100%;
+    border: none;
+    outline: none;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -301,6 +304,13 @@ h3 {
     cursor: pointer;
     transition: all 0.2s;
 
+    &-icon {
+      height: 100%;
+      background: white;
+
+      // width: 3rem;
+    }
+
     &:hover {
       transform: translateY(-0.2rem);
       box-shadow: 0 0.4rem 1.4rem rgb(170, 170, 170);
@@ -308,17 +318,21 @@ h3 {
 
     &--google {
       background: white;
-      color: red;
+      // color: red;
     }
 
     &--facebook {
-      background: var(--color-facebook);
-      color: white;
+      background: white;
+
+      // background: var(--color-facebook);
+      // color: white;
     }
 
     &--direct {
-      background: var(--color-main);
-      color: white;
+      background: white;
+
+      // background: var(--color-main);
+      // color: white;
     }
   }
 }

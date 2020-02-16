@@ -40,15 +40,15 @@ const SingleWord = ({
   const handleSubmit = event => {
     event.preventDefault();
     if (!!comment.length)
-    addComment(
-      currentProject.id,
-      word.title,
-      comment,
-      currentUserProfile.uid,
-      currentUserProfile.name,
-      currentUserProfile.avatar,
-      setComment
-    );
+      addComment(
+        currentProject.id,
+        word.title,
+        comment,
+        currentUserProfile.uid,
+        currentUserProfile.name,
+        currentUserProfile.avatar,
+        setComment
+      );
   };
 
   const handleVote = vote => {
@@ -58,7 +58,6 @@ const SingleWord = ({
       vote,
       currentUserProfile.uid,
       currentProject.team.length
-      
     );
   };
 
@@ -96,6 +95,7 @@ const SingleWord = ({
           href={`https://www.namecheap.com/domains/registration/results.aspx?domain=${word.title}`}
           target="_blank"
           className="single-word__cta"
+          onClick={(()=>console.log("domaaaainaian"))}
         >
           Check Domain
         </a>
@@ -118,14 +118,16 @@ const SingleWord = ({
           <i className="icon edit"></i> Comment
         </button>
       </form>
-      <details>
-        <summary>{wordComments.length} comments</summary>
-        {!!wordComments.length ? (
-          <div className="single-word__comments tiny-margin-top">
-            {renderComments()}
-          </div>
-        ) : null}
-      </details>
+      {!!wordComments.length ? (
+        <details>
+          <summary>{wordComments.length} comments</summary>
+          {!!wordComments.length ? (
+            <div className="single-word__comments tiny-margin-top">
+              {renderComments()}
+            </div>
+          ) : null}
+        </details>
+      ) : null}
     </div>
   );
 };

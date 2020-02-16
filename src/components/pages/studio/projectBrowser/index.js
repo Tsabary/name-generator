@@ -10,6 +10,7 @@ const ProjectBrowser = ({ projects, fetchProjects, setCurrentPage }) => {
   const { currentUser } = useContext(AuthContext);
 
   useEffect(() => {
+    
     setCurrentPage('studio')
     if (!!currentUser) fetchProjects(currentUser);
   }, [currentUser]);

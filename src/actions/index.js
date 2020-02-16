@@ -1,6 +1,7 @@
 import firebase from "../firebase";
 import {
   FETCH_PROJECTS,
+  NEW_PROJECT,
   FETCH_SINGLE_PROJECT,
   FETCH_WORDS,
   SET_PAGE,
@@ -28,6 +29,7 @@ const storageRef = firebase.storage().ref();
 ///////////////////fucking dangorous cleaning actions//////////
 
 export const cleanWords = collection => () => {
+  console.log("cleaning");
   db.collection(collection)
     .get()
     .then(allDocs => {
@@ -46,7 +48,7 @@ export const logIn = (email, password) => () => {
     .auth()
     .signInWithEmailAndPassword(email, password)
     .then(() => {
-      window.location.hash = "";
+      window.location.hash = "#";
     });
 };
 
@@ -79,11 +81,24 @@ export const providerSignIn = provider => () => {
   }
 };
 
-export const updateProfile = (values, user, imageObj) => () => {
+export const updateProfile = (values, user, imageObj, setSubmitting) => () => {
   db.collection("users")
     .doc(user.uid)
-    .set(values, { merge: true });
-  storageRef.child(`images/user_avatars/${user.uid}`).put(imageObj);
+    .set(values, { merge: true })
+    .then(() => {
+      if (!!imageObj) {
+        storageRef
+          .child(`images/user_avatars/${user.uid}`)
+          .put(imageObj)
+          .then(() => {
+            setSubmitting(false);
+            window.location.hash = "#";
+          });
+      } else {
+        setSubmitting(false);
+        window.location.hash = "#";
+      }
+    });
 };
 
 //////// data population actions //////////
@@ -169,10 +184,17 @@ export const fetchReplies = projectID => async dispatch => {
 
 ////////// Data creation/update methods //////////
 
-export const newProject = values => () => {
+export const newProject = (values, setSubmitting) => dispatch => {
   const newDoc = db.collection("projects").doc();
 
-  newDoc.set({ ...values, id: newDoc.id });
+  newDoc.set({ ...values, id: newDoc.id }).then(() => {
+    window.location.hash = "#";
+    setSubmitting(false);
+    dispatch({
+      type: NEW_PROJECT,
+      payload: values
+    });
+  });
 };
 
 export const addMember = (email, project_ID, setFormStatus) => async () => {
@@ -180,8 +202,6 @@ export const addMember = (email, project_ID, setFormStatus) => async () => {
     .collection("users")
     .where("email", "==", email)
     .get();
-
-  console.log(data);
 
   data.empty
     ? setFormStatus(

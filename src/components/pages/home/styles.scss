@@ -1,5 +1,9 @@
 .home {
-  position: fixed;
+  // position: fixed;
+
+  &__videp{
+    width: 100%;
+  }
 
   &__title {
     width: 60%;

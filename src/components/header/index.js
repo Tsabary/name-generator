@@ -36,13 +36,11 @@ const Header = ({ setCurrentPage }) => {
       <div className="header__logo-container">
         {/* <div className="header__logo" /> */}
         <div className="header__title" onClick={handleClick}>
-          Brand
+          Fabntt
         </div>
       </div>
 
-      <div className="header__menu">
-        <Menu />
-      </div>
+      <div className="header__menu">{!!currentUser ? <Menu /> : null}</div>
       <div className="header__auth">{renderAuth()}</div>
     </div>
   );

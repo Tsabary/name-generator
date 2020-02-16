@@ -47,7 +47,7 @@ const LogIn = ({ logIn, providerSignIn }) => {
               providerSignIn("google");
             }}
           >
-            google
+            <img src="../../imgs/g-logo.png" className="auth__button-icon" />
           </div>
           <div
             className="auth__button auth__button--facebook small-margin-top"
@@ -55,7 +55,7 @@ const LogIn = ({ logIn, providerSignIn }) => {
               providerSignIn("facebook");
             }}
           >
-            facebook
+            <img src="../../imgs/f-logo.png" className="auth__button-icon" />
           </div>
         </form>
       </div>

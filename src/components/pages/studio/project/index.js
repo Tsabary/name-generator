@@ -1,6 +1,7 @@
 import "./styles.scss";
 import React, { useState, useEffect, useContext } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import { AuthContext } from "../../../../providers/Auth";
 
@@ -60,7 +61,6 @@ const Project = ({
   const [wasSaved, setWasSaved] = useState(false);
   const [currentWordLength, setCurrentWordLength] = useState(false);
   const [previousWord, setPreviousWord] = useState([]);
-  // const [qualityBalance, setQualityBalance] = useState([0]);
   const [qualityBalance, setQualityBalance] = useState({
     good: 0,
     average: 0,
@@ -92,18 +92,14 @@ const Project = ({
   useEffect(() => {
     if (!currentWord.length) {
       generateSet([{}, {}, {}, {}]);
-      // console.log("generating set");
     }
   }, []);
 
   useEffect(() => {
-    // console.log("classifyWords", wordSet.length);
     classifyWords(wordSet); //whenever the word set has ListeningStateChangedEvent, we want to calssify our words
   }, [wordSet]);
 
   useEffect(() => {
-    // console.log(currentWord);
-    // console.log(previousWord);
     if (
       !!wordBank
       //   //  &&
@@ -121,8 +117,6 @@ const Project = ({
       assignWord(wordBank, qualityBalance, setQualityBalance); //need a better check
       // setPreviousWord(currentWord);
     }
-
-    console.log(wordBank);
   }, [wordBank]);
 
   useEffect(() => {
@@ -132,29 +126,6 @@ const Project = ({
       setCurrentWordLength(currentWord.length);
     }
 
-    // console.log(currentWord);
-    // console.log(previousWord);
-
-    // console.log(
-    //   currentWord
-    //     .map(letter => {
-    //       return letter.letter;
-    //     })
-    //     .join("") ===
-    //     previousWord
-    //       .map(letter => {
-    //         return letter.letter;
-    //       })
-    //       .join("")
-    // );
-    // console.log(currentWord !== previousWord);
-    // console.log(!!previousWord.length);
-
-    // console.log(
-    //   currentWord.map(letter => {
-    //     return letter.locked;
-    //   })
-    // );
 
     // If the previous word and the new word generate the same string, but we still got a new word, then most likely it is becuse the locked state of one of the letters has changed. Not certain, and probably not the best way to go but might be a good solution for now.
     // The last chack is to see if any of the letters is unlocked, or if they are all locked. Before, I f we reached a point where they were all locked, then we ran into a loop. Probably because he generator can only produce 1 result with these conditions and then it keeps getting forced to generate another set because our bank is too low. With this we don't.
@@ -179,20 +150,7 @@ When should a new set be generated, in regard so the word changing (as opposed t
           .join("") &&
       !!previousWord.length
     ) {
-      console.log(
-        currentWord
-          .map(letter => {
-            return letter.locked;
-          })
-          .join("")
-      );
-      console.log(
-        previousWord
-          .map(letter => {
-            return letter.locked;
-          })
-          .join("")
-      );
+
       generateSet(currentWord);
     }
 
@@ -263,7 +221,7 @@ When should a new set be generated, in regard so the word changing (as opposed t
     );
   };
 
-  return (
+  return !!currentUserProfile ? (
     <div className="shuffler">
       <Header currentProject={currentProject} addMember={addMember} />
       <Shuffler addLetterStart={addLetterStart} addLetterEnd={addLetterEnd} />
@@ -273,6 +231,8 @@ When should a new set be generated, in regard so the word changing (as opposed t
         {renderList(savedWords)}
       </div>
     </div>
+  ) : (
+    <Redirect to="/" />
   );
 };
 
