@@ -22,8 +22,12 @@
     font-family: var(--font-main-bold);
     font-size: 5rem;
     user-select: none;
+    transition: all .1s;
     &:hover {
       color: var(--color-main);
+    }
+    &:active{
+      font-size: 5.3rem;
     }
   }
   &__words {

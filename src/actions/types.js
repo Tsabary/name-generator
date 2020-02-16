@@ -21,6 +21,7 @@ export const LOCK_LETTER = "LOCK_LETTER";
 export const REMOVE_LETTER = "REMOVE_LETTER";
 export const CHANGE_LETTER = "CHANGE_LETTER";
 export const ADD_COMMENT = "ADD_COMMENT";
+export const ADD_REPLY = "ADD_REPLY";
 export const FETCH_SINGLE_PROJECT = "FETCH_SINGLE_PROJECT";
 export const GENERATE_SET = "GENERATE_SET";
 export const CLASSIFY_WORDS = "CLASSIFY_WORDS";

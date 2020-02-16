@@ -2,27 +2,16 @@ import {
   ADD_END,
   ADD_START,
   ASSIGN_WORD,
-  LOCK_LETTER,
+  // LOCK_LETTER,
   CHANGE_LETTER,
   REMOVE_LETTER
 } from "../../actions/types";
 
 export default (
-  state = [
-    // { position: 0, letter: "p", locked: false },
-    // { position: 1, letter: "l", locked: false },
-    // { position: 2, letter: "u", locked: false },
-    // { position: 3, letter: "m", locked: false }
-  ],
+  state = [],
   action
 ) => {
   switch (action.type) {
-    // case ADD_START:
-    //   var newWord = [{ position: 0, letter: "x", locked: false }, ...state];
-    //   for (var i = 0; i < newWord.length; i++) {
-    //     newWord[i].position = i;
-    //   }
-    //   return newWord;
 
     case ADD_START:
       let newWordStart = [
@@ -44,14 +33,15 @@ export default (
       return newWordEnd;
 
     case ASSIGN_WORD:
-      return action.payload.good[0];
+      return action.payload[0];
 
-    case LOCK_LETTER:
-      return state.map(letter => {
-        return letter.position === action.payload.position
-          ? action.payload
-          : letter;
-      });
+    // case LOCK_LETTER:
+      
+    //   return state.map(letter => {
+    //     return letter.position === action.payload.position
+    //       ? action.payload
+    //       : letter;
+    //   });
 
     case REMOVE_LETTER:
       console.log("remove called from reducer");
@@ -62,6 +52,8 @@ export default (
       return newWord;
 
     case CHANGE_LETTER:
+      console.log("letter changing in reducer")
+
       return state.map(letter => {
         if (letter.position === action.payload.position) {
           return action.payload;

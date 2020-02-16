@@ -10,10 +10,15 @@ export const Global = createGlobalStyle`
     // --color-main: #AB2087;
     // --color-main-dark: #991b77;
 
+    // new blue
+    --color-main: #1472FF;
+    --color-main-dark: #0E51B5;
+    --color-main-darkest: #0A3B85;
+
     // blue
-    --color-main: #2196F3;
-    --color-main-dark: #1976D2;
-    --color-main-darkest: #0D47A1;
+   // --color-main: #2196F3;
+    // --color-main-dark: #1976D2;
+    // --color-main-darkest: #0D47A1;
 
     --color-main-transparent: rgba(90, 50, 100, 0.05);
 

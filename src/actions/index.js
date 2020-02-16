@@ -4,7 +4,7 @@ import {
   FETCH_SINGLE_PROJECT,
   FETCH_WORDS,
   SET_PAGE,
-  LOCK_LETTER,
+  // LOCK_LETTER,
   REMOVE_LETTER,
   ADD_START,
   ADD_END,
@@ -13,11 +13,13 @@ import {
   SET_PROJECT,
   REMOVE_WORD,
   ADD_COMMENT,
+  ADD_REPLY,
   FETCH_COMMENTS,
   FETCH_REPLIES,
   CLASSIFY_WORDS,
   REMOVE_WORD_FROM_BANK,
-  ASSIGN_WORD
+  ASSIGN_WORD,
+  CHANGE_LETTER
 } from "./types";
 
 const db = firebase.firestore();
@@ -173,26 +175,37 @@ export const newProject = values => () => {
   newDoc.set({ ...values, id: newDoc.id });
 };
 
-export const addMember = (email, project_ID) => async () => {
+export const addMember = (email, project_ID, setFormStatus) => async () => {
   const data = await db
     .collection("users")
     .where("email", "==", email)
     .get();
-  const newUser = data.docs[0].data();
 
-  db.collection("projects")
-    .doc(project_ID)
-    .set(
-      {
-        users: firebase.firestore.FieldValue.arrayUnion(newUser.uid),
-        team: firebase.firestore.FieldValue.arrayUnion({
-          uid: newUser.uid,
-          name: newUser.name,
-          avatar: newUser.avatar
-        })
-      },
-      { merge: true }
-    );
+  console.log(data);
+
+  data.empty
+    ? setFormStatus(
+        "We couldn't find a user with a matching email. Please make sure other members create accounts before being added."
+      )
+    : db
+        .collection("projects")
+        .doc(project_ID)
+        .set(
+          {
+            users: firebase.firestore.FieldValue.arrayUnion(
+              data.docs[0].data().uid
+            ),
+            team: firebase.firestore.FieldValue.arrayUnion({
+              uid: data.docs[0].data().uid,
+              name: data.docs[0].data().name,
+              avatar: data.docs[0].data().avatar
+            })
+          },
+          { merge: true }
+        )
+        .then(() => {
+          setFormStatus("User added! Add more members to your team.");
+        });
 };
 
 ///////////// internal actions ///////////
@@ -214,7 +227,7 @@ export const setProject = project => {
 //////// Word related actions////////
 
 export const generateSet = currentWord => {
-  console.log("generating set");
+  // console.log("generating set");
   return {
     type: GENERATE_SET,
     payload: currentWord
@@ -222,7 +235,7 @@ export const generateSet = currentWord => {
 };
 
 export const classifyWords = set => {
-  console.log("classifyWords");
+  // console.log("classifyWords");
 
   return {
     type: CLASSIFY_WORDS,
@@ -237,15 +250,16 @@ export const removeWordFromBank = word => {
   };
 };
 
-export const lockLetter = letter => {
+export const changeLetter = letter => {
+  // console.log("letter changing ");
   return {
-    type: LOCK_LETTER,
+    type: CHANGE_LETTER,
     payload: letter
   };
 };
 
 export const removeLetter = letterPosition => {
-  console.log("remove called from action");
+  // console.log("remove called from action");
 
   return {
     type: REMOVE_LETTER,
@@ -253,11 +267,90 @@ export const removeLetter = letterPosition => {
   };
 };
 
-export const assignWord = bank => {
-  return {
-    type: ASSIGN_WORD,
-    payload: bank
-  };
+export const assignWord = (
+  bank,
+  qualityBalance,
+  setQualityBalance
+) => dispatch => {
+  // const qualityAverage =
+  //   qualityBalance.reduce((a, b) => a + b, 0) / qualityBalance.length;
+  // console.log(qualityAverage);
+
+  const wordCount =
+    qualityBalance.good + qualityBalance.average + qualityBalance.bad;
+
+  console.log(qualityBalance);
+  console.log(wordCount);
+
+  switch (true) {
+    case qualityBalance.good / wordCount < 0.8:
+      setQualityBalance({ ...qualityBalance, good: qualityBalance.good + 1 });
+
+      dispatch({
+        type: ASSIGN_WORD,
+        payload: bank.good
+      });
+      break;
+
+    case qualityBalance.average / wordCount < 0.15:
+      setQualityBalance({
+        ...qualityBalance,
+        average: qualityBalance.average + 1
+      });
+
+      dispatch({
+        type: ASSIGN_WORD,
+        payload: bank.average
+      });
+      break;
+
+    default:
+      setQualityBalance({ ...qualityBalance, bad: qualityBalance.bad + 1 });
+
+      dispatch({
+        type: ASSIGN_WORD,
+        payload: bank.bad
+      });
+      break;
+  }
+
+  // switch (true) {
+  //   case qualityAverage > 1.5:
+  //     setQualityBalance([...qualityBalance, 1]);
+
+  //     dispatch({
+  //       type: ASSIGN_WORD,
+  //       payload: bank.good
+  //     });
+  //     break;
+
+  //   case qualityAverage > 1.3:
+  //     setQualityBalance([...qualityBalance, 2]);
+
+  //     dispatch({
+  //       type: ASSIGN_WORD,
+  //       payload: bank.average
+  //     });
+  //     break;
+
+  //   default:
+  //     setQualityBalance([...qualityBalance, 3]);
+
+  //     dispatch({
+  //       type: ASSIGN_WORD,
+  //       payload: bank.bad
+  //     });
+  //     break;
+
+  //   // case qualityAverage > 1.2:
+  //   //   setQualityBalance([...qualityBalance, 3]);
+
+  //   //   dispatch({
+  //   //     type: ASSIGN_WORD,
+  //   //     payload: bank.bad
+  //   //   });
+  //   //   break;
+  // }
 };
 
 export const addLetterStart = () => {
@@ -413,7 +506,7 @@ export const addReply = (
   newDoc.set(docObject).then(() => {
     clearForm("");
     dispatch({
-      type: ADD_COMMENT,
+      type: ADD_REPLY,
       payload: docObject
     });
   });

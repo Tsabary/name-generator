@@ -60,6 +60,12 @@ const Project = ({
   const [wasSaved, setWasSaved] = useState(false);
   const [currentWordLength, setCurrentWordLength] = useState(false);
   const [previousWord, setPreviousWord] = useState([]);
+  // const [qualityBalance, setQualityBalance] = useState([0]);
+  const [qualityBalance, setQualityBalance] = useState({
+    good: 0,
+    average: 0,
+    bad: 0
+  });
 
   useEffect(() => {
     setCurrentPage("studio"); // set the current page, for the menu and for the bg video
@@ -112,9 +118,11 @@ const Project = ({
       //   //     })
       //   //     .join("")
     ) {
-      assignWord(wordBank); //need a better check
+      assignWord(wordBank, qualityBalance, setQualityBalance); //need a better check
       // setPreviousWord(currentWord);
     }
+
+    console.log(wordBank);
   }, [wordBank]);
 
   useEffect(() => {
@@ -124,23 +132,23 @@ const Project = ({
       setCurrentWordLength(currentWord.length);
     }
 
-    console.log(currentWord);
-    console.log(previousWord);
+    // console.log(currentWord);
+    // console.log(previousWord);
 
-    console.log(
-      currentWord
-        .map(letter => {
-          return letter.letter;
-        })
-        .join("") ===
-        previousWord
-          .map(letter => {
-            return letter.letter;
-          })
-          .join("")
-    );
-    console.log(currentWord !== previousWord);
-    console.log(!!previousWord.length);
+    // console.log(
+    //   currentWord
+    //     .map(letter => {
+    //       return letter.letter;
+    //     })
+    //     .join("") ===
+    //     previousWord
+    //       .map(letter => {
+    //         return letter.letter;
+    //       })
+    //       .join("")
+    // );
+    // console.log(currentWord !== previousWord);
+    // console.log(!!previousWord.length);
 
     // console.log(
     //   currentWord.map(letter => {
@@ -149,40 +157,83 @@ const Project = ({
     // );
 
     // If the previous word and the new word generate the same string, but we still got a new word, then most likely it is becuse the locked state of one of the letters has changed. Not certain, and probably not the best way to go but might be a good solution for now.
-    // The last chack is to see if any of the letters is unlocked, or if they are al locked. Before, I f we reached a point where they were all locked, then we ran into a loop. WIth this we don't.
-    // prreferably a more elegant approach could be taken, but for now, it works.
-    
+    // The last chack is to see if any of the letters is unlocked, or if they are all locked. Before, I f we reached a point where they were all locked, then we ran into a loop. Probably because he generator can only produce 1 result with these conditions and then it keeps getting forced to generate another set because our bank is too low. With this we don't.
+    // prefferably a more elegant approach could be taken, but for now, it works.
+
+    /* 
+When should a new set be generated, in regard so the word changing (as opposed to our bank being low)?
+1. The lock state of at least one letter has changed.
+2. The length of the word has changed.
+    */
+
     if (
-      currentWord
-        .map(letter => {
-          return letter.letter;
-        })
-        .join("") ===
-        previousWord
-          .map(letter => {
-            return letter.letter;
-          })
-          .join("") &&
-      currentWord !== previousWord &&
-      !!previousWord.length &&
       currentWord
         .map(letter => {
           return letter.locked;
         })
-        .includes(false)
+        .join("") !==
+        previousWord
+          .map(letter => {
+            return letter.locked;
+          })
+          .join("") &&
+      !!previousWord.length
     ) {
-      console.log("this happens");
+      console.log(
+        currentWord
+          .map(letter => {
+            return letter.locked;
+          })
+          .join("")
+      );
+      console.log(
+        previousWord
+          .map(letter => {
+            return letter.locked;
+          })
+          .join("")
+      );
       generateSet(currentWord);
     }
+
+    // if (
+    //   currentWord
+    //     .map(letter => {
+    //       return letter.letter;
+    //     })
+    //     .join("") ===
+    //     previousWord
+    //       .map(letter => {
+    //         return letter.letter;
+    //       })
+    //       .join("")
+
+    // &&
+
+    //   currentWord !== previousWord
+
+    // &&
+
+    //   !!previousWord.length
+
+    // &&
+
+    //   currentWord
+    //     .map(letter => {
+    //       return letter.locked;
+    //     })
+    //     .includes(false)
+    // ) {
+    //   generateSet(currentWord);
+    // }
+
     setPreviousWord(currentWord);
   }, [currentWord]);
 
   const shuffleClick = () => {
-    wordBank.good.length > 1
-      ? console.log("bigger than 1")
-      : console.log("small or event to 1");
-
-    wordBank.good.length > 1
+    wordBank.good.length > 1 &&
+    wordBank.average.length > 1 &&
+    wordBank.bad.length > 1
       ? handleShuffle(
           currentWord,
           wasSaved,

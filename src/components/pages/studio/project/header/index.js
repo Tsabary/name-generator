@@ -1,16 +1,15 @@
 import "./styles.scss";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
-import {
-  renderAvatars,
-  handleInvite
-} from "../functions";
+import ReactTooltip from "react-tooltip";
 
-const Header = ({ currentProject, addMember }) => {
+import { renderAvatars, handleInvite } from "../functions";
 
+const Header = ({ currentProject, addMember, savedWords }) => {
   const [inviteEmail, setInviteEmail] = useState("");
-  const [formSubmited, setFormSubmited] = useState(false);
+  const [formStatus, setFormStatus] = useState(null);
 
   return (
     <div className="shuffler-header">
@@ -20,12 +19,24 @@ const Header = ({ currentProject, addMember }) => {
         id="invite_members"
       />
       <span className="shuffler-header__visible">
-        <Link className="shuffler__navigate-back" to="/studio">
+        <Link
+          className="shuffler__navigate-back"
+          to="/studio"
+          data-tip
+          data-for={currentProject.id}
+        >
           <span className="tiny-margin-right">&#x2190;</span>
-          {currentProject.title}
+          {!!currentProject.title
+            ? currentProject.title.substring(0, 15)
+            : null}
+          ...
         </Link>
+        <ReactTooltip id={currentProject.id} type="dark" effect="solid">
+          {currentProject.title}
+        </ReactTooltip>
         <div className="shuffler-header__seperator" />
-
+        Ideas: {savedWords.length}
+        <div className="shuffler-header__seperator" />
         {!!currentProject && !!currentProject.team ? (
           <div className="shuffler-header__members">
             {currentProject.team.length}{" "}
@@ -35,7 +46,6 @@ const Header = ({ currentProject, addMember }) => {
             </div>
           </div>
         ) : null}
-
         <div className="shuffler-header__seperator" />
         <div>
           <label className="text-button" htmlFor="invite_members">
@@ -45,11 +55,11 @@ const Header = ({ currentProject, addMember }) => {
       </span>
       <span className="shuffler-header__hidden">
         <label className="text-button" htmlFor="invite_members">
-        <span className="tiny-margin-right">&#x2190;</span> Dashboard
+          <span className="tiny-margin-right">&#x2190;</span> Dashboard
         </label>
-        {formSubmited ? (
-          <div className="text-button" onClick={() => setFormSubmited(false)}>
-            Add another member
+        {!!formStatus ? (
+          <div className="text-button" onClick={() => setFormStatus(null)}>
+            {formStatus}
           </div>
         ) : (
           <form
@@ -59,7 +69,7 @@ const Header = ({ currentProject, addMember }) => {
                 addMember,
                 inviteEmail,
                 setInviteEmail,
-                setFormSubmited,
+                setFormStatus,
                 currentProject.id
               )
             }
@@ -84,4 +94,10 @@ const Header = ({ currentProject, addMember }) => {
   );
 };
 
-export default Header;
+const mapStateToProps = state => {
+  return {
+    savedWords: state.savedWords
+  };
+};
+
+export default connect(mapStateToProps)(Header);

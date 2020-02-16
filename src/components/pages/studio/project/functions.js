@@ -122,7 +122,9 @@ export const renderAvatars = memebrs => {
             "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png"
           }
         />
-        <ReactTooltip id={memeber.uid} type="dark" effect="solid">{memeber.name}</ReactTooltip>
+        <ReactTooltip id={memeber.uid} type="dark" effect="solid">
+          {memeber.name}
+        </ReactTooltip>
       </div>
     );
   });
@@ -133,11 +135,10 @@ export const handleInvite = (
   addMember,
   inviteEmail,
   setInviteEmail,
-  setFormSubmited,
+  setFormStatus,
   project_ID
 ) => {
   e.preventDefault();
   setInviteEmail("");
-  setFormSubmited(true);
-  addMember(inviteEmail, project_ID);
+  addMember(inviteEmail, project_ID, setFormStatus);
 };

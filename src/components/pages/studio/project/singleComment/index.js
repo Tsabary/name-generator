@@ -26,7 +26,6 @@ const SingleComment = ({ replies, currentProject, comment, addReply }) => {
   };
 
   const renderReplies = () => {
-    console.log(replies);
     return !!commentReplies.length
       ? commentReplies.sort(compare).map(reply => {
           return <SingleReply reply={reply} key={reply.id} />;
